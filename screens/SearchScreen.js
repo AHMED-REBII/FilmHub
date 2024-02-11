@@ -12,12 +12,15 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { XMarkIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
+import Loading from "../components/loading";
 
 const { width, height } = Dimensions.get("window");
 
 export default function SearchScreen() {
   const navigation = useNavigation();
   const [results, setResults] = useState([1, 2, 3, 4]);
+  const [loading, setLoading] = useState(false);
+
   let movieName = "Ant-Man and the Wasp : Quantumania";
 
   return (
@@ -36,7 +39,9 @@ export default function SearchScreen() {
         </TouchableOpacity>
       </View>
 
-      {results.length > 0 ? (
+      {loading ? (
+        <Loading />
+      ) : results.length > 0 ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 15 }}
@@ -59,9 +64,7 @@ export default function SearchScreen() {
                       className="rounded-3xl"
                       style={{ width: width * 0.44, height: height * 0.3 }}
                     />
-                    <Text className="text-gray-300 ml-1">
-                      movieName
-                    </Text>
+                    <Text className="text-gray-300 ml-1">movieName</Text>
                   </View>
                 </TouchableWithoutFeedback>
               );

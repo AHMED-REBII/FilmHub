@@ -15,7 +15,7 @@ import { HeartIcon } from "react-native-heroicons/solid";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Cast from "../components/cast";
 import MovieList from "../components/movieList";
-
+import Loading from "../components/loading";
 import { styles, theme } from "../theme";
 
 const ios = Platform.OS == "ios";
@@ -31,6 +31,7 @@ export default function MovieScreen() {
   const [cast, setCast] = useState([1, 2, 3, 4, 5]);
   const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
   const [isFavourite, toggleFavourite] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   let movieName = "Ant-Man and the Wasp : Quantumania";
 
@@ -64,25 +65,29 @@ export default function MovieScreen() {
           </TouchableOpacity>
         </SafeAreaView>
 
-        <View>
-          <Image
-            // source={require('../assets/images/moviePoster2.png')}
-            // source={{uri: image500(movie.poster_path) || fallbackMoviePoster}}
-            source={require("../assets/images/moviePoster2.png")}
-            style={{ width, height: height * 0.55 }}
-          />
-          <LinearGradient
-            colors={[
-              "transparent",
-              "rgba(23, 23, 23, 0.8)",
-              "rgba(23, 23, 23, 1)",
-            ]}
-            style={{ width, height: height * 0.4 }}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 1 }}
-            className="absolute bottom-0"
-          />
-        </View>
+        {loading ? (
+          <Loading />
+        ) : (
+          <View>
+            <Image
+              // source={require('../assets/images/moviePoster2.png')}
+              // source={{uri: image500(movie.poster_path) || fallbackMoviePoster}}
+              source={require("../assets/images/moviePoster2.png")}
+              style={{ width, height: height * 0.55 }}
+            />
+            <LinearGradient
+              colors={[
+                "transparent",
+                "rgba(23, 23, 23, 0.8)",
+                "rgba(23, 23, 23, 1)",
+              ]}
+              style={{ width, height: height * 0.4 }}
+              start={{ x: 0.5, y: 0 }}
+              end={{ x: 0.5, y: 1 }}
+              className="absolute bottom-0"
+            />
+          </View>
+        )}
       </View>
       <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
         <Text className="text-white text-center text-3xl font-bold tracking-widest">
