@@ -52,7 +52,6 @@ export default function HomeScreen() {
 
   const getTopRatedMovies = async () => {
     const data = await fetchTopRatedMovies();
-    console.log("got toprated movies", data);
     if (data && data.results) setTopRated(data.results);
   };
 

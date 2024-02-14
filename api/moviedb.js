@@ -4,11 +4,22 @@ import { apiKey } from "../constants";
 const apiBaseUrl = "https://api.themoviedb.org/3";
 const trendingMoviesEndpoint = `${apiBaseUrl}/trending/movie/day?language=en-US&api_key=${apiKey}`;
 const upcomingMoviesEndpoint = `${apiBaseUrl}/movie/upcoming?language=en-US&page=1&api_key=${apiKey}`;
-const topRatedEndpoint = `${apiBaseUrl}/tv/top_rated?language=en-US&page=1&api_key=${apiKey}`;
+const topRatedEndpoint = `${apiBaseUrl}/movie/top_rated?language=en-US&page=1&api_key=${apiKey}`;
 
-export const image500 = (path) => path ? `https://image.tmdb.org/t/p/w500${path}` : null;
-export const image342 = (path) => path ? `https://image.tmdb.org/t/p/w342${path}` : null;
-export const image185 = (path) => path ? `https://image.tmdb.org/t/p/w185${path}` : null;
+const movieDetailsEndpoint = (id) =>
+  `${apiBaseUrl}/movie/${id}?language=en-US&page=1&api_key=${apiKey}`;
+const movieCreditsEndpoint = (id) =>
+  `${apiBaseUrl}/movie/${id}/credits?language=en-US&page=1&api_key=${apiKey}`;
+const SimilarmoviesEndpoint = (id) =>
+  `${apiBaseUrl}/movie/${id}/similar?language=en-US&page=1&api_key=${apiKey}`;
+
+export const image500 = (path) =>
+  path ? `https://image.tmdb.org/t/p/w500${path}` : null;
+export const image342 = (path) =>
+  path ? `https://image.tmdb.org/t/p/w342${path}` : null;
+export const image185 = (path) =>
+  path ? `https://image.tmdb.org/t/p/w185${path}` : null;
+
 
 const apiCall = async (endpoint, params) => {
   const options = {
@@ -36,4 +47,15 @@ export const fetchUpcomingMovies = () => {
 
 export const fetchTopRatedMovies = () => {
   return apiCall(topRatedEndpoint);
+};
+
+export const fetchMovieDetails = (id) => {
+  return apiCall(movieDetailsEndpoint(id));
+};
+export const fetchMovieCredits = (id) => {
+  return apiCall(movieCreditsEndpoint(id));
+};
+
+export const fetchSimilarMovies = (id) => {
+  return apiCall(SimilarmoviesEndpoint(id));
 };

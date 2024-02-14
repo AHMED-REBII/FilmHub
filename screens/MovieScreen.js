@@ -17,6 +17,12 @@ import Cast from "../components/cast";
 import MovieList from "../components/movieList";
 import Loading from "../components/loading";
 import { styles, theme } from "../theme";
+import {
+  fetchMovieCredits,
+  fetchMovieDetails,
+  fetchSimilarMovies,
+  image500,
+} from "../api/moviedb";
 
 const ios = Platform.OS == "ios";
 
@@ -28,14 +34,33 @@ export default function MovieScreen() {
   const { params: item } = useRoute();
   const navigation = useNavigation();
   const [movie, setMovie] = useState({});
-  const [cast, setCast] = useState([1, 2, 3, 4, 5]);
+  const [cast, setCast] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
   const [isFavourite, toggleFavourite] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  let movieName = "Ant-Man and the Wasp : Quantumania";
+  useEffect(() => {
+    setLoading(true);
+    getMovieDetails(item.id);
+    getMovieCredits(item.id);
+    getSimilarMovies(item.id);
+  }, [item]);
 
-  useEffect(() => {}, [item]);
+  const getMovieDetails = async (id) => {
+    const data = await fetchMovieDetails(id);
+    if (data) setMovie(data);
+    setLoading(false);
+  };
+
+  const getMovieCredits = async (id) => {
+    const data = await fetchMovieCredits(id);
+    if (data && data.cast) setCast(data.cast);
+  };
+
+  const getSimilarMovies = async (id) => {
+    const data = await fetchSimilarMovies(id);
+    if (data && data.results) setSimilarMovies(data.results);
+  };
 
   return (
     <ScrollView
@@ -70,9 +95,7 @@ export default function MovieScreen() {
         ) : (
           <View>
             <Image
-              // source={require('../assets/images/moviePoster2.png')}
-              // source={{uri: image500(movie.poster_path) || fallbackMoviePoster}}
-              source={require("../assets/images/moviePoster2.png")}
+              source={{ uri: image500(movie?.poster_path) }}
               style={{ width, height: height * 0.55 }}
             />
             <LinearGradient
@@ -91,30 +114,40 @@ export default function MovieScreen() {
       </View>
       <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
         <Text className="text-white text-center text-3xl font-bold tracking-widest">
-          movieName
+          {movie?.title}
         </Text>
 
-        <Text className="text-neutral-400 font-semibold text-base text-center">
-          Released * 2020 * 170 min
-        </Text>
+        {movie?.id ? (
+          <Text className="text-neutral-400 font-semibold text-base text-center">
+            {movie?.status} * {movie?.release_date?.split("-")[0]} *{" "}
+            {movie?.runtime} min{" "}
+          </Text>
+        ) : null}
 
-        <Text className="text-neutral-400 font-semibold text-base text-center">
-          Action *
-        </Text>
-        <Text className="text-neutral-400 font-semibold text-base text-center">
-          Thrill *
-        </Text>
-        <Text className="text-neutral-400 font-semibold text-base text-center">
-          Comedy *
-        </Text>
+        <View className="flex-row justify-center mx-4 space-x-2">
+          {movie?.genres?.map((genre, index) => {
+            let showDot = index + 1 !== movie?.genres?.length;
+            return (
+              <Text
+                key={index}
+                className="text-neutral-400 font-semibold text-base text-center"
+              >
+                {genre?.name} {showDot ? "•" : null}
+              </Text>
+            );
+          })}
+        </View>
         <Text className="text-neutral-400 mx-4 tracking-wide">
-          Description nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+          {movie?.overview}
         </Text>
       </View>
 
       <Cast cast={cast} navigation={navigation} />
-
-      
+      <MovieList
+        title="Similar Movies"
+        hideSeeAll={true}
+        data={similarMovies}
+      />
     </ScrollView>
   );
 }
