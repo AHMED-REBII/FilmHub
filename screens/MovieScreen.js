@@ -95,8 +95,12 @@ export default function MovieScreen() {
         ) : (
           <View>
             <Image
-              source={{ uri: image500(movie?.poster_path) }}
               style={{ width, height: height * 0.55 }}
+              source={
+                movie?.poster_path
+                  ? { uri: image500(movie?.poster_path) }
+                  : require("../assets/fallbackfilm.png")
+              }
             />
             <LinearGradient
               colors={[
