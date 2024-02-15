@@ -10,6 +10,9 @@ const movieDetailsEndpoint = (id) =>
   `${apiBaseUrl}/movie/${id}?language=en-US&page=1&api_key=${apiKey}`;
 const movieCreditsEndpoint = (id) =>
   `${apiBaseUrl}/movie/${id}/credits?language=en-US&page=1&api_key=${apiKey}`;
+
+const searchMoviesEndpoint = `${apiBaseUrl}/search/movie?language=en-US&page=1&api_key=${apiKey}`;
+
 const SimilarmoviesEndpoint = (id) =>
   `${apiBaseUrl}/movie/${id}/similar?language=en-US&page=1&api_key=${apiKey}`;
 
@@ -70,4 +73,8 @@ export const fetchPersonDetails = (id) => {
 
 export const fetchPersonMovies = (id) => {
   return apiCall(personMoviesEndpoint(id));
+};
+
+export const searchMovies = (params) => {
+  return apiCall(searchMoviesEndpoint, params);
 };
